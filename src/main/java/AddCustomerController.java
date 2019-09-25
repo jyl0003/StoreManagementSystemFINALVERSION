@@ -3,8 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AddCustomerController {
-    //    AddButtonListener addButtonListener = new AddButtonListener();
-//    CancelButtonListener cancelButtonListener = new CancelButtonListener();
+   
     public AddCustomerView view;
     public SQLiteDataAdapter adapter;
 
