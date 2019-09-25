@@ -10,6 +10,8 @@ public class SQLiteDataAdapter {
 
     public static final int PRODUCT_SAVED_OK = 0;
     public static final int PRODUCT_SAVED_FAILED = -1;
+    public static final int CUSTOMER_SAVED_OK = 0;
+    public static final int CUSTOMER_SAVED_FAILED = -1;
     public void connect() throws ClassNotFoundException {
         try {
             // db parameters
@@ -57,6 +59,22 @@ public class SQLiteDataAdapter {
         }
 
         return PRODUCT_SAVED_OK;
+    }
+    public int saveCustomer(CustomerModel customer) {
+        try {
+            String sql = "INSERT INTO Customer(CustomerID, Name, Address, Phone, PaymentInfo) VALUES " + customer;
+            System.out.println(sql);
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            System.out.println(msg);
+            if (msg.contains("UNIQUE constraint failed"))
+                return CUSTOMER_SAVED_FAILED;
+        }
+
+        return CUSTOMER_SAVED_OK;
     }
 
 }
