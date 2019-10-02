@@ -5,17 +5,12 @@ import java.sql.ResultSet;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class SQLiteDataAdapter {
+public class SQLiteDataAdapter implements IDataAdapter {
     Connection conn = null;
-
-    public static final int PRODUCT_SAVED_OK = 0;
-    public static final int PRODUCT_SAVED_FAILED = -1;
-    public static final int CUSTOMER_SAVED_OK = 0;
-    public static final int CUSTOMER_SAVED_FAILED = -1;
-    public void connect() throws ClassNotFoundException {
+    public int connect(String dbFile) {
         try {
             // db parameters
-            String url = "jdbc:sqlite:C:\\Users\\jlee9\\StoreManagementSystem\\Activity10.db";
+            String url = "jdbc:sqlite:" + dbFile;
 
             conn = DriverManager.getConnection(url);
 
@@ -23,9 +18,21 @@ public class SQLiteDataAdapter {
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return OPEN_CONNECTION_FAILED;
         }
+        return OPEN_CONNECTION_OK;
     }
-
+    @Override
+    public int disconnect() {
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return  CLOSE_CONNECTION_FAILED;
+        }
+        return CLOSE_CONNECTION_OK;
+    }
+    @Override
     public ProductModel loadProduct(int productID) {
         ProductModel product = new ProductModel();
 
@@ -59,6 +66,25 @@ public class SQLiteDataAdapter {
         }
 
         return PRODUCT_SAVED_OK;
+    }
+    public CustomerModel loadCustomer(int id) {
+        CustomerModel customerModel = new CustomerModel();
+
+        try {
+            String sql = "SELECT CustomerID, Name, Address, Phone, PaymentInfo FROM Customer WHERE CustomerID = " + id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            customerModel.mCustomerID = rs.getInt("CustomerID");
+            customerModel.mName = rs.getString("Name");
+            customerModel.mAddress = rs.getString("Address");
+            customerModel.mPhone = rs.getString("Quantity");
+            customerModel.mPaymentInfo = rs.getString("PaymentInfo");
+
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return customerModel;
     }
     public int saveCustomer(CustomerModel customer) {
         try {

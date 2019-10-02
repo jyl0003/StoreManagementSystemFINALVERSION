@@ -4,7 +4,9 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AddProductView extends  JFrame{
+public class AddProductView {
+    public JFrame view;
+
     public JButton button = new JButton("Add");
     public JButton cancel = new JButton("Cancel");
 
@@ -14,50 +16,98 @@ public class AddProductView extends  JFrame{
     public JTextField txtQuantity = new JTextField(20);
 
     public AddProductView() {
-        this.setTitle("Add Product");
-        this.setSize(600,400);
-        this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
+        this.view = new JFrame();
+        view.setTitle("Add Product");
+        view.setSize(600,400);
+        view.getContentPane().setLayout(new BoxLayout(view.getContentPane(), BoxLayout.PAGE_AXIS));
         String[] labels = {"ProductId: ", "Name: ", "Price: ", "Quantity: "};
-        int numPairs = labels.length;
+        //int numPairs = labels.length;
 
         JPanel line1 = new JPanel(new FlowLayout());
         line1.add(new JLabel("ProductID "));
         line1.add(txtProductID);
-
+        view.getContentPane().add(line1);
         JPanel line2 = new JPanel(new FlowLayout());
         line2.add(new JLabel("Name "));
         line2.add(txtName);
-
+        view.getContentPane().add(line2);
         JPanel line3 = new JPanel(new FlowLayout());
         line3.add(new JLabel("Price "));
         line3.add(txtPrice);
-
+        view.getContentPane().add(line3);
         JPanel line4 = new JPanel(new FlowLayout());
         line4.add(new JLabel("Quantity "));
         line4.add(txtQuantity);
-//Create and populate the panel.
-        this.getContentPane().add(line1);
-        this.getContentPane().add(line2);
-        this.getContentPane().add(line3);
-        this.getContentPane().add(line4);
-       // Container p = this.getContentPane();
-       // for (String label : labels) {
-           /* JLabel l = new JLabel(label, JLabel.TRAILING);
-            p.add(l);
-            JTextField textField = new JTextField(10);
-            l.setLabelFor(textField);
-            p.add(textField);*/
-        //}
+        view.getContentPane().add(line4);
+
         JPanel panel = new JPanel((new FlowLayout()));
         panel.add(button);
         panel.add(cancel);
-        this.getContentPane().add(panel);
-//Lay out the panel.
-        /*SpringUtilities.makeCompactGrid(p,
-                numPairs, 2, //rows, cols
-                6, 6,        //initX, initY
-                6, 6);       //xPad, yPad*/
+        view.getContentPane().add(panel);
+
+        button.addActionListener(new AddButtonListener());
+
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JOptionPane.showMessageDialog(null, "You click on Cancel button!!!");
+            }
+        });
     }
+    public void run() {
+        view.setVisible(true);
+    }
+
+    class AddButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            ProductModel product = new ProductModel();
+            String id = txtProductID.getText();
+            if (id.equals("")) {
+                JOptionPane.showMessageDialog(null, "ProductID cannot be null!!");
+                return;
+            }
+            try {
+                product.mProductID = Integer.parseInt(id);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "ProductID cannot be null!!");
+                return;
+            }
+            // product.mProductID = Integer.parseInt(AddProductController.this.view.txtProductID.getText());
+            String name = txtName.getText();
+            if (name.equals("")) {
+                JOptionPane.showMessageDialog(null, "Name cannot be empty!!");
+                return;
+            }
+            product.mName = name;
+
+            String price = txtPrice.getText();
+            try {
+                product.mPrice = Double.parseDouble(price);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Price is Invalid!!");
+                return;
+            }
+
+            String quantity = txtQuantity.getText();
+            try {
+                product.mQuantity = Integer.parseInt(quantity);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Quantity is Invalid!!");
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "You want to add " + product);
+            switch (StoreManager.getInstance().getDataAdapter().saveProduct(product)) {
+                case SQLiteDataAdapter.PRODUCT_SAVED_FAILED:
+                    JOptionPane.showMessageDialog(null, "Product NOT added successfully! Duplicate product ID!");
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Product added successfully!" + product);
+            }
+        }
+    }
+
 }
 
 

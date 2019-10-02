@@ -1,32 +1,51 @@
 import javax.swing.*;
-import java.awt.*;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 public class StoreManager extends JFrame{
+    public static final String DBMS_SQ_LITE = "SQLite";
+    public static final String DB_FILE = "C:\\Users\\jlee9\\StoreManagementSystem\\Activity10.db";
 
-  /*  public JButton addProduct = new JButton("Add Product");
-    public JButton addCustomer = new JButton("Add Customer");
+    IDataAdapter adapter = null;
+    private static StoreManager instance = null;
 
-    public StoreManager() {
-        this.setTitle("Add Customer");
-        this.setSize(600,400);
-        JPanel panel = new JPanel((new FlowLayout()));
-        panel.add(addProduct);
-        panel.add(addCustomer);
-    }*/
+    public static StoreManager getInstance() {
+        if (instance == null) {
+            String dbfile = DB_FILE;
+            JFileChooser fc = new JFileChooser();
+            if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                dbfile = fc.getSelectedFile().getAbsolutePath();
+            }
+            instance = new StoreManager(DBMS_SQ_LITE, dbfile);
+        }
+        return instance;
+    }
 
+    private StoreManager(String dbms, String dbFile) {
+        if (dbms.equals("Oracle")) {
+            adapter = new OracleDataAdapter();
+        }
+        else
+        if (dbms.equals("SQLite"))
+            adapter = new SQLiteDataAdapter();
+
+        adapter.connect(dbFile);
+        ProductModel product = adapter.loadProduct(3);
+
+        System.out.println("Loaded product: " + product);
+
+    }
+
+    public IDataAdapter getDataAdapter() {
+        return adapter;
+    }
+
+    public void setDataAdapter(IDataAdapter a) {
+        adapter = a;
+    }
+    public void run() {
+        MenuUI ui = new MenuUI();
+        ui.view.setVisible(true);
+    }
     public static void main(String[] args) throws ClassNotFoundException {
-        System.out.println("Hello class!");
-        //Class.forName("org.sqlite.jdbc");
-        SQLiteDataAdapter adapter = new SQLiteDataAdapter();
-        adapter.connect();
-        /*AddProductView apView = new AddProductView();
-        AddProductController apCtr = new AddProductController(apView, adapter);
-        apView.setVisible(true);*/
-
-        AddCustomerView cstmrView = new AddCustomerView();
-        AddCustomerController cstmrCtr = new AddCustomerController(cstmrView, adapter);
-        cstmrView.setVisible(true);
+        StoreManager.getInstance().run();
     }
 }
