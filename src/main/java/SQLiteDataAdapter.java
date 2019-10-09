@@ -37,7 +37,7 @@ public class SQLiteDataAdapter implements IDataAdapter {
         ProductModel product = new ProductModel();
 
         try {
-            String sql = "SELECT ProductId, Name, Price, Quantity FROM Products WHERE ProductId = " + productID;
+            String sql = "SELECT ProductID, Name, Price, Quantity FROM Product WHERE ProductID = " + productID;
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             product.mProductID = rs.getInt("ProductId");
@@ -50,6 +50,20 @@ public class SQLiteDataAdapter implements IDataAdapter {
             System.out.println(e.getMessage());
         }
         return product;
+    }
+    public String loadProductName(int id) {
+        ProductModel productModel = new ProductModel();
+        String name = "";
+        try {
+            String sql = "SELECT Name FROM Product WHERE ProductID = " + id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            name = rs.getString("Name");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return name;
     }
     public int saveProduct(ProductModel product) {
         try {
@@ -86,6 +100,20 @@ public class SQLiteDataAdapter implements IDataAdapter {
         }
         return customerModel;
     }
+    public String loadCustomerID_NAME(int id) {
+        CustomerModel customerModel = new CustomerModel();
+        String name = "";
+        try {
+            String sql = "SELECT Name FROM Customer WHERE CustomerID = " + id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            name = rs.getString("Name");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return name;
+    }
     public int saveCustomer(CustomerModel customer) {
         try {
             String sql = "INSERT INTO Customer(CustomerID, Name, Address, Phone, PaymentInfo) VALUES " + customer;
@@ -101,6 +129,39 @@ public class SQLiteDataAdapter implements IDataAdapter {
         }
 
         return CUSTOMER_SAVED_OK;
+    }
+    public PurchaseModel loadPurchase(int id) {
+        PurchaseModel purchaseModel = new PurchaseModel();
+
+        try {
+            String sql = "SELECT PurchaseID, ProductID, CustomerID, Quantity  FROM Purchase WHERE PurchaseID = " + id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            purchaseModel.mProductID = rs.getInt("CustomerID");
+            purchaseModel.mPurchaseId = rs.getInt("Name");
+            purchaseModel.mCustomerID = rs.getInt("Address");
+            purchaseModel.mQuantity = rs.getInt("Quantity");
+
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return purchaseModel;
+    }
+    public String savePurchase(PurchaseModel purchaseModel) {
+        try {
+            String sql = "INSERT INTO Purchase(PurchaseID, ProductID, CustomerID, Quantity) VALUES " + purchaseModel;
+            System.out.println(sql);
+            Statement statement = conn.createStatement();
+            statement.executeUpdate(sql);
+        }
+        catch (Exception e) {
+            String msg = e.getMessage();
+            System.out.println(msg);
+            if (msg.contains("constraint failed"))
+                return msg;
+        }
+        return "Purchase Added Successfully!";
     }
 
 }

@@ -43,5 +43,13 @@ public class MenuUI {
                 addCustomerView.run();
             }
         });
+
+        btnAddPurchase.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddPurchaseView addPurchaseView = new AddPurchaseView();
+                addPurchaseView.run();
+            }
+        });
     }
 }

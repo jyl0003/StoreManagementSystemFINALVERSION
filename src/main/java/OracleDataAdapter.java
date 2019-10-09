@@ -13,13 +13,17 @@ public class OracleDataAdapter implements IDataAdapter {
     public ProductModel loadProduct(int id) {
         return null;
     }
+    public String loadProductName(int id) {return null;}
     public int saveProduct(ProductModel model) {
         return PRODUCT_SAVED_OK;
     }
     public CustomerModel loadCustomer(int id) {
         return null;
     }
+    public String loadCustomerID_NAME(int id) {return null;}
     public int saveCustomer(CustomerModel model) {
         return CUSTOMER_SAVED_OK;
     }
+    public PurchaseModel loadPurchase(int id) {return null; }
+    public String savePurchase(PurchaseModel purchaseModel) {return null; }
 }
