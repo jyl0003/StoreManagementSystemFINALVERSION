@@ -153,9 +153,11 @@ public class AddPurchaseView {
                     labCustomerName.setText("Customer Name: " + customerModel.mName);
                     labProductName.setText("Product Name: " + productModel.mName);
                     labPrice.setText("Price: " + df.format(productModel.mPrice));
-                    labTax.setText("Tax Rate: " + TAX_RATE * 100 + "%");
-                    labCost.setText("Cost: " + df.format(productModel.mPrice * purchase.mQuantity));
                     double costNoTax = productModel.mPrice * purchase.mQuantity;
+                    double tax = costNoTax * TAX_RATE;
+                    labTax.setText("Tax: " + df.format(tax));
+                    labCost.setText("Cost: " + df.format(productModel.mPrice * purchase.mQuantity));
+                   // double costNoTax = productModel.mPrice * purchase.mQuantity;
                     double totalCost = costNoTax + costNoTax * TAX_RATE;
                     labTotalCost.setText("Total Cost: " + df.format(totalCost));
                     JOptionPane.showMessageDialog(null, "You want to add " + purchase + "?");
