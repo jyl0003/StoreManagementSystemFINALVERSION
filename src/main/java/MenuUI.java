@@ -11,6 +11,7 @@ public class MenuUI {
     public JButton btnAddCustomer = new JButton("Add Customer");
     public JButton btnAddPurchase = new JButton("Add Purchase");
 
+    public JButton btnUpdateProduct = new JButton("Update Product");
     public MenuUI() {
         this.view = new JFrame();
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,6 +27,7 @@ public class MenuUI {
         panel.add(btnAddProduct);
         panel.add(btnAddCustomer);
         panel.add(btnAddPurchase);
+        panel.add(btnUpdateProduct);
         view.getContentPane().add(panel);
 
         btnAddProduct.addActionListener(new ActionListener() {
@@ -49,6 +51,14 @@ public class MenuUI {
             public void actionPerformed(ActionEvent e) {
                 AddPurchaseView addPurchaseView = new AddPurchaseView();
                 addPurchaseView.run();
+            }
+        });
+
+        btnUpdateProduct.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UpdateProductUI ui = new UpdateProductUI();
+                ui.run();
             }
         });
     }
