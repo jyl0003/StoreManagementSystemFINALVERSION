@@ -1,9 +1,4 @@
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
-
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class SQLiteDataAdapter implements IDataAdapter {
     Connection conn = null;
@@ -51,6 +46,35 @@ public class SQLiteDataAdapter implements IDataAdapter {
         }
         return product;
     }
+    public int updateProduct(ProductModel product) {
+        //ProductModel product = new ProductModel();
+        int productID = product.mProductID;
+        String name1 = product.mName;
+        Double price = product.mPrice;
+        Double quantity = product.mQuantity;
+        try {
+            String sql = "UPDATE Product" +
+                    "     Set Name = ? , Price = ?, Quantity = ? " +
+                    "     WHERE ProductID = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, name1);
+            preparedStatement.setDouble(2, price);
+            preparedStatement.setDouble(3, quantity);
+            preparedStatement.setInt(4, productID);
+            preparedStatement.executeUpdate();
+           /* Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);*/
+            /*product.mProductID = rs.getInt("ProductId");
+            product.mName = rs.getString("Name");
+            product.mPrice = rs.getDouble("Price");
+            product.mQuantity = rs.getDouble("Quantity");*/
+            return PRODUCT_SAVED_OK;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return PRODUCT_SAVED_FAILED;
+    }
     public String loadProductName(int id) {
         ProductModel productModel = new ProductModel();
         String name = "";
@@ -91,7 +115,7 @@ public class SQLiteDataAdapter implements IDataAdapter {
             customerModel.mCustomerID = rs.getInt("CustomerID");
             customerModel.mName = rs.getString("Name");
             customerModel.mAddress = rs.getString("Address");
-            customerModel.mPhone = rs.getString("Quantity");
+            customerModel.mPhone = rs.getString("Phone");
             customerModel.mPaymentInfo = rs.getString("PaymentInfo");
 
 
@@ -108,6 +132,52 @@ public class SQLiteDataAdapter implements IDataAdapter {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             name = rs.getString("Name");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return name;
+    }
+    public int updateCustomer(CustomerModel customerModel) {
+        int customerID = customerModel.mCustomerID;
+        String name1 = customerModel.mName;
+        String address = customerModel.mAddress;
+        String phone = customerModel.mPhone;
+        String paymentInfo = customerModel.mPaymentInfo;
+        try {
+            String sql = "UPDATE Customer" +
+                    "     Set Name = ? , Address = ?, Phone = ?, PaymentInfo = ?" +
+                    "     WHERE CustomerID = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, name1);
+            preparedStatement.setString(2, address);
+            preparedStatement.setString(3, phone);
+            preparedStatement.setString(4, paymentInfo);
+            preparedStatement.setInt(5, customerID);
+
+            preparedStatement.executeUpdate();
+           /* Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);*/
+            /*product.mProductID = rs.getInt("ProductId");
+            product.mName = rs.getString("Name");
+            product.mPrice = rs.getDouble("Price");
+            product.mQuantity = rs.getDouble("Quantity");*/
+            return CUSTOMER_SAVED_OK;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return CUSTOMER_SAVED_FAILED;
+    }
+    public String deleteCustomer(CustomerModel customerModel) {
+        //CustomerModel customerModel = new CustomerModel();
+        //int id
+        String name = "";
+        try {
+            String sql = "DELETE FROM Customer WHERE  CustomerID = " + customerModel.mCustomerID;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            //name = rs.getString("Name");
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

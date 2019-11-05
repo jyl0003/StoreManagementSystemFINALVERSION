@@ -28,10 +28,6 @@ public class StoreManager extends JFrame{
             adapter = new SQLiteDataAdapter();
 
         adapter.connect(dbFile);
-        ProductModel product = adapter.loadProduct(3);
-
-        System.out.println("Loaded product: " + product);
-
     }
 
     public IDataAdapter getDataAdapter() {

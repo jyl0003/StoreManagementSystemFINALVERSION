@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 public class AddProductView {
     public JFrame view;
 
-    public JButton button = new JButton("Add");
-    public JButton cancel = new JButton("Cancel");
+    public JButton btnLoad = new JButton("Load");
+    public JButton btnSave = new JButton("Save");
 
     public JTextField txtProductID = new JTextField(20);
     public JTextField txtName = new JTextField(20);
@@ -41,13 +41,13 @@ public class AddProductView {
         view.getContentPane().add(line4);
 
         JPanel panel = new JPanel((new FlowLayout()));
-        panel.add(button);
-        panel.add(cancel);
+        panel.add(btnLoad);
+        panel.add(btnSave);
         view.getContentPane().add(panel);
 
-        button.addActionListener(new AddButtonListener());
+        btnLoad.addActionListener(new AddButtonListener());
 
-        cancel.addActionListener(new ActionListener() {
+        btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JOptionPane.showMessageDialog(null, "You click on Cancel button!!!");

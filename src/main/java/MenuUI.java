@@ -7,11 +7,11 @@ import java.awt.event.ActionListener;
 public class MenuUI {
     public JFrame view;
 
-    public JButton btnAddProduct = new JButton("Add Product");
-    public JButton btnAddCustomer = new JButton("Add Customer");
-    public JButton btnAddPurchase = new JButton("Add Purchase");
+    public JButton btnAddProduct = new JButton("Configure Product");
+    public JButton btnAddCustomer = new JButton("Configure Customer");
+    public JButton btnAddPurchase = new JButton("Configure Purchase");
 
-    public JButton btnUpdateProduct = new JButton("Update Product");
+  //  public JButton btnUpdateProduct = new JButton("Update Product");
     public MenuUI() {
         this.view = new JFrame();
         view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,14 +27,14 @@ public class MenuUI {
         panel.add(btnAddProduct);
         panel.add(btnAddCustomer);
         panel.add(btnAddPurchase);
-        panel.add(btnUpdateProduct);
+        //panel.add(btnUpdateProduct);
         view.getContentPane().add(panel);
 
         btnAddProduct.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               AddProductView addProductView = new AddProductView();
-               addProductView.run();
+               UpdateProductUI ui = new UpdateProductUI();
+               ui.run();
             }
         });
 
@@ -54,12 +54,12 @@ public class MenuUI {
             }
         });
 
-        btnUpdateProduct.addActionListener(new ActionListener() {
+     /*   btnUpdateProduct.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UpdateProductUI ui = new UpdateProductUI();
                 ui.run();
             }
-        });
+        });*/
     }
 }
