@@ -16,6 +16,7 @@ public class AddCustomerView {
     public JButton btnCreate = new JButton("Create New");
 
     public JTextField txtCustomerID = new JTextField(20);
+    public JTextField txtUsername = new JTextField(20);
     public JTextField txtName = new JTextField(20);
     public JTextField txtAddress = new JTextField(20);
     public JTextField txtPhone = new JTextField(20);
@@ -39,6 +40,10 @@ public class AddCustomerView {
         line1.add(new JLabel("CustomerID "));
         line1.add(txtCustomerID);
 
+        JPanel line6 = new JPanel(new FlowLayout());
+        line1.add(new JLabel("Username "));
+        line1.add(txtUsername);
+
         JPanel line2 = new JPanel(new FlowLayout());
         line2.add(new JLabel("Name "));
         line2.add(txtName);
@@ -56,6 +61,7 @@ public class AddCustomerView {
         line5.add(txtPaymentInfo);
 //Create and populate the panel.
         view.getContentPane().add(line1);
+        view.getContentPane().add(line6);
         view.getContentPane().add(line2);
         view.getContentPane().add(line3);
         view.getContentPane().add(line4);
@@ -106,6 +112,7 @@ public class AddCustomerView {
                 else {
                     customer = gson.fromJson(msg.data, CustomerModel.class);
                     txtName.setText(customer.mName);
+                    txtUsername.setText(customer.mUsername);
                     txtAddress.setText(customer.mAddress);
                     txtPhone.setText(customer.mPhone);
                     txtPaymentInfo.setText(customer.mPaymentInfo);
@@ -115,44 +122,6 @@ public class AddCustomerView {
             catch (Exception e) {
                 e.printStackTrace();
             }
-            /*
-            // product.mProductID = Integer.parseInt(AddProductController.this.view.txtProductID.getText());
-            String name = txtName.getText();
-            if (name.equals("")) {
-                JOptionPane.showMessageDialog(null, "Name cannot be empty!!");
-                return;
-            }
-            customer.mName = name;
-
-            String address = txtAddress.getText();
-            if (address.equals("")) {
-                JOptionPane.showMessageDialog(null, "Address cannot be empty!!");
-                return;
-            }
-            customer.mAddress = address;
-
-            String phone = txtPhone.getText();
-            if (phone.equals("")) {
-                JOptionPane.showMessageDialog(null, "Phone cannot be empty!!");
-                return;
-            }
-            customer.mPhone = phone;
-
-            String paymentInfo = txtPaymentInfo.getText();
-            if (paymentInfo.equals("")) {
-                JOptionPane.showMessageDialog(null, "PaymentInfo cannot be empty!!");
-                return;
-            }
-            customer.mPaymentInfo = paymentInfo;
-
-            JOptionPane.showMessageDialog(null, "You want to add " + customer);
-            switch (StoreManager.getInstance().getDataAdapter().saveCustomer(customer)) {
-                case SQLiteDataAdapter.PRODUCT_SAVED_FAILED:
-                    JOptionPane.showMessageDialog(null, "Customer NOT added successfully! Duplicate Customer ID!");
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Customer added successfully!" + customer);
-            }*/
         }
     }
     class UpdateButtonListener implements ActionListener {
@@ -246,6 +215,9 @@ public class AddCustomerView {
                 JOptionPane.showMessageDialog(null, "CustomerID is invalid!");
                 return;
             }
+            String username = txtUsername.getText();
+            customer.mUsername = username;
+
             String name = txtName.getText();
             if (name.equals("")) {
                 JOptionPane.showMessageDialog(null, "Name cannot be empty!!");
@@ -286,6 +258,9 @@ public class AddCustomerView {
                 output.println(gson.toJson(msg));
 
                 msg = gson.fromJson(input.nextLine(), MessageModel.class);
+                if (msg.code == MessageModel.OPERATION_OK) {
+                    JOptionPane.showMessageDialog(null, "Customer added Successfully");
+                }
                 /*
                 output.println("PUT");
                 output.println(product.mProductID);
